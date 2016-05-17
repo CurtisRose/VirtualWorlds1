@@ -29,36 +29,54 @@ var keyArrowDown = false,
     keyArrowUp = false,
 	keyArrowLeft = false,
 	keyArrowRight = false;
+var characterSpeed = 3;
+var tickSpeed =  30;
 
 function checkKeyPressed(key){
-    if(key.keyCode == 37) {
+    if (key.keyCode == 65 || key.keyCode == 37) {
         keyArrowLeft = true;
     }
-    else if(key.keyCode == 39) {
+    if (key.keyCode == 68 || key.keyCode == 39) {
 		keyArrowRight = true;
     }
+	if (key.keyCode == 87 || key.keyCode == 38) {
+		keyArrowUp = true;
+	}
+	if (key.keyCode == 83 || key.keyCode == 40) {
+		keyArrowDown = true;
+	}
 }
 
 function checkKeyReleased(key){
-    if(key.keyCode == 37) {
+    if (key.keyCode == 65 || key.keyCode == 37) {
         keyArrowLeft = false;
     }
-    else if(key.keyCode == 39) {
+    if (key.keyCode == 68 || key.keyCode == 39) {
 		keyArrowRight = false;
     }
+	if (key.keyCode == 87 || key.keyCode == 38) {
+		keyArrowUp = false;
+	}
+	if (key.keyCode == 83 || key.keyCode == 40) {
+		keyArrowDown = false;
+	}
 }
 
 var tick = function() {
 	if (keyArrowLeft) {
-		sprite.position.x -= 1;
-		
+		sprite.position.x -= characterSpeed;
 	}
-	else if (keyArrowRight) {
-		sprite.position.x += 1;
-		
+	if (keyArrowRight) {
+		sprite.position.x += characterSpeed;
+	}
+	if (keyArrowUp) {
+		sprite.position.y -= characterSpeed;
+	}
+	if (keyArrowDown) {
+		sprite.position.y += characterSpeed;
 	}
 	
-	setTimeout(tick, 30);
+	setTimeout(tick, tickSpeed);
 };
 tick();
 
