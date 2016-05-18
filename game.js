@@ -30,9 +30,11 @@ var floor = height - 130,
 	sprite = new PIXI.Sprite(character),
 	goblinSprite = new PIXI.Sprite(goblin),
 	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"});
+	pressEnter = new PIXI.Text("Press Enter to Play Again", {font:"25px Arial", fill:"black"});
 	//Positioning second clouds.
 	cloudsSprite2.position.x = 600;
 	cloudsSprite3.position.x = 600;
+	cloudsSprite3.scale.x = -1;
 //Global variables for Jump() function.
 var startJumpSpeed = 12,
 	jumpSpeed = startJumpSpeed,
@@ -174,6 +176,8 @@ function PrepareArtwork() {
 	//Setting the "Game Over" text position.
 	endGame.position.x = 190;
 	endGame.position.y = 280;
+	pressEnter.position.x = 175;
+	pressEnter.position.y = 350;
 	//Stage the sprites.
 	stage.addChild(background);
 	background.addChild(skySprite);
@@ -216,8 +220,8 @@ function MoveClouds() {
 	if (cloudsSprite2.position.x <= -600) {
 		cloudsSprite2.position.x = 600;
 	}
-	if (cloudsSprite3.position.x <= -400) {
-		cloudsSprite3.position.x = 600;
+	if (cloudsSprite3.position.x <= 0) {
+		cloudsSprite3.position.x = 1000;
 	}
 }
 
@@ -231,6 +235,7 @@ function Update() {
 	else {
 		//Game Over
 		stage.addChild(endGame);
+		stage.addChild(pressEnter);
 		//Restart game by hitting enter.
 		if (startNewGame) {
 			gameOver = false;
