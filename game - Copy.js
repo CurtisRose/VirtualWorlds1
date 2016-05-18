@@ -1,18 +1,18 @@
-//Global variables for screen.
-var width = 600,
-	height = 600,
-	renderer = PIXI.autoDetectRenderer(width, height, {backgroundColor: 0x000000});
+
+var renderer = PIXI.autoDetectRenderer(width - 200, height - 200, {backgroundColor: 0x000000});
 gameport.appendChild(renderer.view);
-//Global variables for PrepareArtwork() function.
-var floor = height - 130,
+//Global variables for PrepareArtwork() function;
+var width = 600,
+    height = 600,
+	floor = height - 130,
 	stage = new PIXI.Container(),
 	scene = PIXI.Texture.fromImage("Scene.png"),
 	character = PIXI.Texture.fromImage("character.png"),
 	sceneSprite = new PIXI.Sprite(scene),
 	sprite = new PIXI.Sprite(character);
 //Global variables for Jump() function.
-var startJumpSpeed = 12,
-	jumpSpeed = startJumpSpeed,
+var jumpHeight = 100,
+	jumpSpeed = 12,
 	gravity = 0.7,
 	jumping;
     goingDown = false,
@@ -64,7 +64,7 @@ function checkKeyReleased(key){
 }
 
 var Jump = function() {
-	if (jumpSpeed >= 0 && !goingDown) {
+	if (sprite.position.y >= floor - jumpHeight && !goingDown) {
 		sprite.position.y -= jumpSpeed;
 		jumpSpeed -= gravity;
 	} 
@@ -77,7 +77,7 @@ var Jump = function() {
 			goingDown = false;
 			inAir = false;
 			sprite.position.y = floor;
-			jumpSpeed = startJumpSpeed;
+			jumpSpeed = 10;
 		}
 	}
 }
