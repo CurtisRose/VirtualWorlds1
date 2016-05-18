@@ -232,15 +232,13 @@ function GoblinMovement() {
 }
 
 function Walking() {
-	if(keyArrowRight || keyArrowLeft) {
-		if (sprite.renderable){
-			sprite.renderable = false;
-			sprite2.renderable = true;
-		} 
-		else if (sprite2.renderable){
-			sprite.renderable = true;
-			sprite2.renderable = false;
-		}
+	if (sprite.renderable){
+		sprite.renderable = false;
+		sprite2.renderable = true;
+	} 
+	else if (sprite2.renderable){
+		sprite.renderable = true;
+		sprite2.renderable = false;
 	}
 	if (goblinSprite.renderable){
 		goblinSprite.renderable = false;
