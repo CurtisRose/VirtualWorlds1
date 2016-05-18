@@ -1,3 +1,12 @@
+//Preparing game and event listenters.
+var gameport, context;
+gameport = document.getElementById("gameport");
+//context = gameport.getContext("2d");
+document.addEventListener("keydown", checkKeyPressed, false);
+document.addEventListener("keyup", checkKeyReleased, false);
+//ctx.font = "30px Arial";
+//ctx.fillText("Hello World",10,50);
+
 //Global variables for screen.
 var width = 600,
 	height = 600,
@@ -17,6 +26,12 @@ var startJumpSpeed = 12,
 	jumping;
     goingDown = false,
 	inAir = false;
+//Global variables for UserInput() function.
+	var keyArrowDown = false,
+    keyArrowUp = false,
+	keyArrowLeft = false,
+	keyArrowRight = false,
+	characterSpeed = 5;
 
 
 
@@ -25,13 +40,6 @@ function animate() {
   renderer.render(stage);
 }
 animate();
-
-var keyArrowDown = false,
-    keyArrowUp = false,
-	keyArrowLeft = false,
-	keyArrowRight = false;
-var characterSpeed = 3;
-var tickSpeed =  30;
 
 function checkKeyPressed(key){
     if (key.keyCode == 65 || key.keyCode == 37) {
@@ -82,12 +90,16 @@ var Jump = function() {
 	}
 }
 
-var userInput = function() {
+function UserInput() {
 	if (keyArrowLeft) {
-		sprite.position.x -= characterSpeed;
+		if (sprite.position.x >= 0 + 30) {
+			sprite.position.x -= characterSpeed;
+		}
 	}
 	if (keyArrowRight) {
-		sprite.position.x += characterSpeed;
+		if (sprite.position.x <= width - 30) {
+			sprite.position.x += characterSpeed;
+		}
 	}
 	if (keyArrowUp && !inAir) {
 		inAir = true;
@@ -96,7 +108,7 @@ var userInput = function() {
 	if (keyArrowDown) {
 		//sprite.position.y += characterSpeed;
 	}
-};
+}
 
 function PrepareArtwork() {
 	//Scale scene to fit window.
@@ -120,13 +132,10 @@ function PrepareArtwork() {
 }
 
 function Update() {
-	userInput();
+	UserInput();
 }
 
 function Start() {
-	var gameport = document.getElementById("gameport");
-	document.addEventListener("keydown", checkKeyPressed, false);
-	document.addEventListener("keyup", checkKeyReleased, false);
 	PrepareArtwork();
 	return setInterval(Update, 30);
 }
