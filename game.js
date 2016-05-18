@@ -27,7 +27,8 @@ var startJumpSpeed = 12,
 	gravity = 0.7,
 	jumping;
     goingDown = false,
-	inAir = false;
+	inAir = false,
+	jumpAgain = true;
 //Global variables for UserInput() function.
 var keyArrowDown = false,
     keyArrowUp = false,
@@ -44,7 +45,8 @@ var goblinStartSpeed = 2,
 //Global variables for CheckEndCondition() function.
 var gameOver = false,
 	playing,
-	startNewGame = false;
+	startNewGame = false,
+	threatDistance = 40;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -67,8 +69,7 @@ function checkKeyPressed(key){
 	}
 	if (key.keyCode == 13) {
 		startNewGame = true;
-	}
-	
+	}	
 }
 
 function checkKeyReleased(key){
@@ -80,6 +81,7 @@ function checkKeyReleased(key){
     }
 	if (key.keyCode == 87 || key.keyCode == 38) {
 		keyArrowUp = false;
+		jumpAgain = true;
 	}
 	if (key.keyCode == 83 || key.keyCode == 40) {
 		keyArrowDown = false;
@@ -100,7 +102,7 @@ var Jump = function() {
 		jumpSpeed += gravity;
 		if (sprite.position.y >= floor) {
 			clearInterval(jumping);
-			goingDown = false;
+			goingDown = false;	
 			inAir = false;
 			sprite.position.y = floor;
 			jumpSpeed = startJumpSpeed;
@@ -119,7 +121,8 @@ function UserInput() {
 			sprite.position.x += characterSpeed;
 		}
 	}
-	if (keyArrowUp && !inAir) {
+	if (keyArrowUp && !inAir && jumpAgain) {
+		jumpAgain = false;
 		inAir = true;
 		jumping = setInterval(Jump, 30);
 	}
@@ -172,7 +175,7 @@ function GoblinMovement() {
 
 function CheckEndCondition() {
 	if (!inAir) {
-		if (Math.abs(sprite.position.x - goblinSprite.position.x) <= 30) {
+		if (Math.abs(sprite.position.x - goblinSprite.position.x) <= threatDistance) {
 			gameOver = true;
 			//clearInterval(playing);
 		}
