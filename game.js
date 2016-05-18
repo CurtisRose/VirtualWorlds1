@@ -17,8 +17,10 @@ var floor = height - 130,
 	stage = new PIXI.Container(),
 	scene = PIXI.Texture.fromImage("Scene.png"),
 	character = PIXI.Texture.fromImage("character.png"),
+	goblin = PIXI.Texture.fromImage("goblin.png"),
 	sceneSprite = new PIXI.Sprite(scene),
-	sprite = new PIXI.Sprite(character);
+	sprite = new PIXI.Sprite(character),
+	goblinSprite = new PIXI.Sprite(goblin);
 //Global variables for Jump() function.
 var startJumpSpeed = 12,
 	jumpSpeed = startJumpSpeed,
@@ -32,7 +34,13 @@ var startJumpSpeed = 12,
 	keyArrowLeft = false,
 	keyArrowRight = false,
 	characterSpeed = 5;
-
+//Global variables for GoblinMovement() function.
+	var goblinStartSpeed = 2,
+		goblinSpeed = goblinStartSpeed,
+		momentum = 0.3,
+		onLeft = false,
+		onRight = true,
+		turning = false;
 
 
 function animate() {
@@ -117,22 +125,49 @@ function PrepareArtwork() {
 	//Scale character to look nicer.
 	sprite.scale.x = 1.8;
 	sprite.scale.y = 1.8;
+	//Scale goblin to look nicer.
+	goblinSprite.scale.x = 1.8;
+	goblinSprite.scale.y = 1.8;
 	//Set rotation anchor at center of character sprite.
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.5;
+	//Set rotation anchor at center of goblin sprite.
+	goblinSprite.anchor.x = 0.5;
+	goblinSprite.anchor.y = 0.5;
 	//Position scene at top left to fill window.
 	sceneSprite.position.x = 0;
 	sceneSprite.position.y = 0;
 	//Position character sprite at arbitrary x axis but on floor on y axis.
 	sprite.position.x = 200;
 	sprite.position.y = floor;
+	//Position goblin sprite at arbitrary x axis, away from character.
+	goblinSprite.position.x = 500;
+	goblinSprite.position.y = floor;
 	//Stage the sprites.
 	stage.addChild(sceneSprite);
+	stage.addChild(goblinSprite);
 	stage.addChild(sprite);
+}
+
+function GoblinMovement() {
+	if (goblinSprite.position.x >= sprite.position.x) {
+		goblinSprite.position.x -= goblinSpeed;
+		goblinSprite.scale.x = -1.8;
+	}
+	else if (goblinSprite.position.x <= sprite.position.x) {
+		goblinSprite.position.x += goblinSpeed;
+		goblinSprite.scale.x = 1.8;
+	}
+}
+
+function CheckEndCondition() {
+	
 }
 
 function Update() {
 	UserInput();
+	GoblinMovement();
+	CheckEndCondition;
 }
 
 function Start() {
