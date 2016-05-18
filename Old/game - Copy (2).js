@@ -1,9 +1,11 @@
 //Preparing game and event listenters.
 var gameport, context;
 gameport = document.getElementById("gameport");
+//context = gameport.getContext("2d");
 document.addEventListener("keydown", checkKeyPressed, false);
 document.addEventListener("keyup", checkKeyReleased, false);
-
+//ctx.font = "30px Arial";
+//ctx.fillText("Hello World",10,50);
 
 //Global variables for screen.
 var width = 600,
@@ -19,7 +21,6 @@ var floor = height - 130,
 	ground = new PIXI.Texture.fromImage("Ground.png"),
 	clouds = new PIXI.Texture.fromImage("Clouds.png"),
 	character = PIXI.Texture.fromImage("character.png"),
-	character2 = PIXI.Texture.fromImage("character2.png"),
 	goblin = PIXI.Texture.fromImage("goblin.png"),
 	skySprite = new PIXI.Sprite(sky),
 	groundSprite = new PIXI.Sprite(ground),
@@ -27,7 +28,6 @@ var floor = height - 130,
 	cloudsSprite2 = new PIXI.Sprite(clouds),
 	cloudsSprite3 = new PIXI.Sprite(clouds),
 	sprite = new PIXI.Sprite(character),
-	sprite2 = new PIXI.Sprite(character2),
 	goblinSprite = new PIXI.Sprite(goblin),
 	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"}),
 	pressEnter = new PIXI.Text("Press Enter to Play Again", {font:"25px Arial", fill:"black"}),
@@ -110,20 +110,17 @@ function checkKeyReleased(key){
 var Jump = function() {
 	if (jumpSpeed >= 0 && !goingDown) {
 		sprite.position.y -= jumpSpeed;
-		sprite2.position.y -= jumpSpeed;
 		jumpSpeed -= gravity;
 	} 
 	else {
 		goingDown = true;
 		sprite.position.y += jumpSpeed;
-		sprite2.position.y += jumpSpeed;
 		jumpSpeed += gravity;
 		if (sprite.position.y >= floor) {
 			clearInterval(jumping);
 			goingDown = false;	
 			inAir = false;
 			sprite.position.y = floor;
-			sprite2.position.y = floor;
 			jumpSpeed = startJumpSpeed;
 		}
 	}
@@ -133,13 +130,11 @@ function UserInput() {
 	if (keyArrowLeft) {
 		if (sprite.position.x >= 0 + 30) {
 			sprite.position.x -= characterSpeed;
-			sprite2.position.x -= characterSpeed;
 		}
 	}
 	if (keyArrowRight) {
 		if (sprite.position.x <= width - 30) {
 			sprite.position.x += characterSpeed;
-			sprite2.position.x += characterSpeed;
 		}
 	}
 	if (keyArrowUp && !inAir && jumpAgain) {
@@ -165,24 +160,18 @@ function PrepareArtwork() {
 	//Scale character to look nicer.
 	sprite.scale.x = 1.8;
 	sprite.scale.y = 1.8;
-	sprite2.scale.x = 1.8;
-	sprite2.scale.y = 1.8;
 	//Scale goblin to look nicer.
 	goblinSprite.scale.x = 1.8;
 	goblinSprite.scale.y = 1.8;
 	//Set rotation anchor at center of character sprite.
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.5;
-	sprite2.anchor.x = 0.5;
-	sprite2.anchor.y = 0.5;
 	//Set rotation anchor at center of goblin sprite.
 	goblinSprite.anchor.x = 0.5;
 	goblinSprite.anchor.y = 0.5;
 	//Position character sprite at arbitrary x axis but on floor on y axis.
 	sprite.position.x = 200;
 	sprite.position.y = floor;
-	sprite2.position.x = 200;
-	sprite2.position.y = floor;
 	//Position goblin sprite at arbitrary x axis, away from character.
 	goblinSprite.position.x = 500;
 	goblinSprite.position.y = floor;
@@ -201,7 +190,6 @@ function PrepareArtwork() {
 	background.addChild(scoreBoard);
 	stage.addChild(characters);
 	characters.addChild(sprite);
-	characters.addChild(sprite2);
 	characters.addChild(goblinSprite);
 }
 
@@ -213,19 +201,6 @@ function GoblinMovement() {
 	else if (goblinSprite.position.x <= sprite.position.x) {
 		goblinSprite.position.x += goblinSpeed;
 		goblinSprite.scale.x = 1.8;
-	}
-}
-
-function Walking() {
-	if(keyArrowRight || keyArrowLeft) {
-		if (sprite.renderable){
-			sprite.renderable = false;
-			sprite2.renderable = true;
-		} 
-		else if (sprite2.renderable){
-			sprite.renderable = true;
-			sprite2.renderable = false;
-		}
 	}
 }
 
@@ -270,7 +245,6 @@ function Update() {
 		stage.addChild(endGame);
 		stage.addChild(pressEnter);
 		clearInterval(keepingScore);
-		clearInterval(walkings);
 		//Restart game by hitting enter.
 		if (startNewGame) {
 			gameOver = false;
@@ -278,7 +252,6 @@ function Update() {
 			score = 0;
 			scoreBoard.setText("Score: " + score);
 			keepingScore = setInterval(KeepScore, 1000);
-			walkings = setInterval(Walking, 200);
 		}
 	}
 }
@@ -286,7 +259,6 @@ function Update() {
 function Start() {
 	PrepareArtwork();
 	keepingScore = setInterval(KeepScore, 1000);
-	walkings = setInterval(Walking, 200);
 	playing = setInterval(Update, 30);
 }
 Start();
