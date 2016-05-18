@@ -20,7 +20,8 @@ var floor = height - 130,
 	goblin = PIXI.Texture.fromImage("goblin.png"),
 	sceneSprite = new PIXI.Sprite(scene),
 	sprite = new PIXI.Sprite(character),
-	goblinSprite = new PIXI.Sprite(goblin);
+	goblinSprite = new PIXI.Sprite(goblin),
+	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"});
 //Global variables for Jump() function.
 var startJumpSpeed = 12,
 	jumpSpeed = startJumpSpeed,
@@ -156,6 +157,9 @@ function PrepareArtwork() {
 	//Position goblin sprite at arbitrary x axis, away from character.
 	goblinSprite.position.x = 500;
 	goblinSprite.position.y = floor;
+	//Setting the "Game Over" text position.
+	endGame.position.x = 190;
+	endGame.position.y = 280;
 	//Stage the sprites.
 	stage.addChild(sceneSprite);
 	stage.addChild(goblinSprite);
@@ -177,7 +181,7 @@ function CheckEndCondition() {
 	if (!inAir) {
 		if (Math.abs(sprite.position.x - goblinSprite.position.x) <= threatDistance) {
 			gameOver = true;
-			//clearInterval(playing);
+			clearInterval(Scoreboard);
 		}
 	}
 }
@@ -189,6 +193,8 @@ function Update() {
 		CheckEndCondition();
 	}
 	else {
+		//Game Over
+		stage.addChild(endGame);
 		//Restart game by hitting enter.
 		if (startNewGame) {
 			gameOver = false;
