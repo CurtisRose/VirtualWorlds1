@@ -29,19 +29,22 @@ var startJumpSpeed = 12,
     goingDown = false,
 	inAir = false;
 //Global variables for UserInput() function.
-	var keyArrowDown = false,
+var keyArrowDown = false,
     keyArrowUp = false,
 	keyArrowLeft = false,
 	keyArrowRight = false,
 	characterSpeed = 5;
 //Global variables for GoblinMovement() function.
-	var goblinStartSpeed = 2,
-		goblinSpeed = goblinStartSpeed,
-		momentum = 0.3,
-		onLeft = false,
-		onRight = true,
-		turning = false;
-
+var goblinStartSpeed = 2,
+	goblinSpeed = goblinStartSpeed,
+	momentum = 0.3,
+	onLeft = false,
+	onRight = true,
+	turning = false;
+//Global variables for CheckEndCondition() function.
+var gameOver = false,
+	playing,
+	startNewGame = false;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -62,6 +65,10 @@ function checkKeyPressed(key){
 	if (key.keyCode == 83 || key.keyCode == 40) {
 		keyArrowDown = true;
 	}
+	if (key.keyCode == 13) {
+		startNewGame = true;
+	}
+	
 }
 
 function checkKeyReleased(key){
@@ -76,6 +83,9 @@ function checkKeyReleased(key){
 	}
 	if (key.keyCode == 83 || key.keyCode == 40) {
 		keyArrowDown = false;
+	}
+	if (key.keyCode == 13) {
+		startNewGame = false;
 	}
 }
 
@@ -161,17 +171,31 @@ function GoblinMovement() {
 }
 
 function CheckEndCondition() {
-	
+	if (!inAir) {
+		if (Math.abs(sprite.position.x - goblinSprite.position.x) <= 30) {
+			gameOver = true;
+			//clearInterval(playing);
+		}
+	}
 }
 
 function Update() {
-	UserInput();
-	GoblinMovement();
-	CheckEndCondition;
+	if (!gameOver) {
+		UserInput();
+		GoblinMovement();
+		CheckEndCondition();
+	}
+	else {
+		//Restart game by hitting enter.
+		if (startNewGame) {
+			gameOver = false;
+			PrepareArtwork();
+		}
+	}
 }
 
 function Start() {
 	PrepareArtwork();
-	return setInterval(Update, 30);
+	playing = setInterval(Update, 30);
 }
 Start();
