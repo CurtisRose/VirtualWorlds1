@@ -64,7 +64,8 @@ var goblinStartSpeed = 2,
 var gameOver = false,
 	playing,
 	startNewGame = false,
-	threatDistance = 40;
+	threatDistance = 40,
+	startGame = false;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -73,6 +74,7 @@ function animate() {
 animate();
 
 function checkKeyPressed(key){
+	startGame = true;
     if (key.keyCode == 65 || key.keyCode == 37) {
         keyArrowLeft = true;
     }
@@ -195,9 +197,9 @@ function PrepareArtwork() {
 	goblinSprite2.position.x = 500;
 	goblinSprite2.position.y = floor;
 	//Setting the "Game Over" text position.
-	endGame.position.x = 190;
+	endGame.position.x = 250;
 	endGame.position.y = 280;
-	pressEnter.position.x = 175;
+	pressEnter.position.x = 245;
 	pressEnter.position.y = 350;
 	//Stage the sprites.
 	stage.addChild(background);
@@ -275,19 +277,22 @@ function MoveClouds() {
 }
 
 function KeepScore() {
-	score += 1;
-	scoreBoard.setText("Score: " + score);
+	if(startGame){
+		score += 1;
+		scoreBoard.setText("Score: " + score);
+	}
 }
 
 function Update() {
 	MoveClouds();
-	if (!gameOver) {
+	if (!gameOver && startGame) {
 		UserInput();
 		GoblinMovement();
 		CheckEndCondition();
 	}
-	else {
+	else if (gameOver){
 		//Game Over
+		startGame = false;
 		stage.addChild(endGame);
 		stage.addChild(pressEnter);
 		clearInterval(keepingScore);
