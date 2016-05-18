@@ -15,13 +15,23 @@ gameport.appendChild(renderer.view);
 //Global variables for PrepareArtwork() function.
 var floor = height - 130,
 	stage = new PIXI.Container(),
-	scene = PIXI.Texture.fromImage("Scene.png"),
+	background = new PIXI.Container(),
+	characters = new PIXI.Container(),
+	sky = new PIXI.Texture.fromImage("Sky.png"),
+	ground = new PIXI.Texture.fromImage("Ground.png"),
+	clouds = new PIXI.Texture.fromImage("Clouds.png"),
+	clouds2 = new PIXI.Texture.fromImage("Clouds.png"),
 	character = PIXI.Texture.fromImage("character.png"),
 	goblin = PIXI.Texture.fromImage("goblin.png"),
-	sceneSprite = new PIXI.Sprite(scene),
+	skySprite = new PIXI.Sprite(sky),
+	groundSprite = new PIXI.Sprite(ground),
+	cloudsSprite = new PIXI.Sprite(clouds),
+	cloudsSprite2 = new PIXI.Sprite(clouds2),
 	sprite = new PIXI.Sprite(character),
 	goblinSprite = new PIXI.Sprite(goblin),
 	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"});
+	//Positioning second clouds.
+	cloudsSprite2.position.x = 600;
 //Global variables for Jump() function.
 var startJumpSpeed = 12,
 	jumpSpeed = startJumpSpeed,
@@ -134,8 +144,14 @@ function UserInput() {
 
 function PrepareArtwork() {
 	//Scale scene to fit window.
-	sceneSprite.scale.x = 1.5;
-	sceneSprite.scale.y = 1.5;
+	cloudsSprite.scale.x = 1.5;
+	cloudsSprite.scale.y = 1.5;
+	cloudsSprite2.scale.x = 1.5;
+	cloudsSprite2.scale.y = 1.5;
+	groundSprite.scale.x = 1.5;
+	groundSprite.scale.y = 1.5;
+	skySprite.scale.x = 1.5;
+	skySprite.scale.y = 1.5;
 	//Scale character to look nicer.
 	sprite.scale.x = 1.8;
 	sprite.scale.y = 1.8;
@@ -148,9 +164,6 @@ function PrepareArtwork() {
 	//Set rotation anchor at center of goblin sprite.
 	goblinSprite.anchor.x = 0.5;
 	goblinSprite.anchor.y = 0.5;
-	//Position scene at top left to fill window.
-	sceneSprite.position.x = 0;
-	sceneSprite.position.y = 0;
 	//Position character sprite at arbitrary x axis but on floor on y axis.
 	sprite.position.x = 200;
 	sprite.position.y = floor;
@@ -161,9 +174,14 @@ function PrepareArtwork() {
 	endGame.position.x = 190;
 	endGame.position.y = 280;
 	//Stage the sprites.
-	stage.addChild(sceneSprite);
-	stage.addChild(goblinSprite);
-	stage.addChild(sprite);
+	stage.addChild(background);
+	background.addChild(skySprite);
+	background.addChild(cloudsSprite);
+	background.addChild(cloudsSprite2);
+	background.addChild(groundSprite);
+	stage.addChild(characters);
+	characters.addChild(sprite);
+	characters.addChild(goblinSprite);
 }
 
 function GoblinMovement() {
@@ -186,7 +204,19 @@ function CheckEndCondition() {
 	}
 }
 
+function MoveClouds() {
+	cloudsSprite.position.x -= 2;
+	cloudsSprite2.position.x -= 2;
+	if (cloudsSprite.position.x <= -600) {
+		cloudsSprite.position.x = 600;
+	}
+	if (cloudsSprite2.position.x <= -600) {
+		cloudsSprite2.position.x = 600;
+	}
+}
+
 function Update() {
+	MoveClouds();
 	if (!gameOver) {
 		UserInput();
 		GoblinMovement();
