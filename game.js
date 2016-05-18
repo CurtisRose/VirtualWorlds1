@@ -21,17 +21,20 @@ var floor = height - 130,
 	ground = new PIXI.Texture.fromImage("Ground.png"),
 	clouds = new PIXI.Texture.fromImage("Clouds.png"),
 	clouds2 = new PIXI.Texture.fromImage("Clouds.png"),
+	clouds3 = new PIXI.Texture.fromImage("Clouds.png"),
 	character = PIXI.Texture.fromImage("character.png"),
 	goblin = PIXI.Texture.fromImage("goblin.png"),
 	skySprite = new PIXI.Sprite(sky),
 	groundSprite = new PIXI.Sprite(ground),
 	cloudsSprite = new PIXI.Sprite(clouds),
 	cloudsSprite2 = new PIXI.Sprite(clouds2),
+	cloudsSprite3 = new PIXI.Sprite(clouds3),
 	sprite = new PIXI.Sprite(character),
 	goblinSprite = new PIXI.Sprite(goblin),
 	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"});
 	//Positioning second clouds.
 	cloudsSprite2.position.x = 600;
+	cloudsSprite3.position.x = 600;
 //Global variables for Jump() function.
 var startJumpSpeed = 12,
 	jumpSpeed = startJumpSpeed,
@@ -177,6 +180,7 @@ function PrepareArtwork() {
 	stage.addChild(background);
 	background.addChild(skySprite);
 	background.addChild(cloudsSprite);
+	background.addChild(cloudsSprite3);
 	background.addChild(cloudsSprite2);
 	background.addChild(groundSprite);
 	stage.addChild(characters);
@@ -207,11 +211,15 @@ function CheckEndCondition() {
 function MoveClouds() {
 	cloudsSprite.position.x -= 2;
 	cloudsSprite2.position.x -= 2;
+	cloudsSprite3.position.x -= 3;
 	if (cloudsSprite.position.x <= -600) {
 		cloudsSprite.position.x = 600;
 	}
 	if (cloudsSprite2.position.x <= -600) {
 		cloudsSprite2.position.x = 600;
+	}
+	if (cloudsSprite3.position.x <= -400) {
+		cloudsSprite3.position.x = 600;
 	}
 }
 
