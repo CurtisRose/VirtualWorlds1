@@ -29,8 +29,10 @@ var floor = height - 130,
 	cloudsSprite3 = new PIXI.Sprite(clouds),
 	sprite = new PIXI.Sprite(character),
 	goblinSprite = new PIXI.Sprite(goblin),
-	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"});
-	pressEnter = new PIXI.Text("Press Enter to Play Again", {font:"25px Arial", fill:"black"});
+	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"}),
+	pressEnter = new PIXI.Text("Press Enter to Play Again", {font:"25px Arial", fill:"black"}),
+	score = 0,
+	scoreBoard = new PIXI.Text("Score: " + score, {font:"50px Arial", fill:"black"});
 	//Positioning second clouds.
 	cloudsSprite2.position.x = 600;
 	cloudsSprite3.position.x = 600;
@@ -185,6 +187,7 @@ function PrepareArtwork() {
 	background.addChild(cloudsSprite3);
 	background.addChild(cloudsSprite2);
 	background.addChild(groundSprite);
+	background.addChild(scoreBoard);
 	stage.addChild(characters);
 	characters.addChild(sprite);
 	characters.addChild(goblinSprite);
@@ -225,6 +228,11 @@ function MoveClouds() {
 	}
 }
 
+function KeepScore() {
+	score += 1;
+	scoreBoard.setText("Score: " + score);
+}
+
 function Update() {
 	MoveClouds();
 	if (!gameOver) {
@@ -236,16 +244,21 @@ function Update() {
 		//Game Over
 		stage.addChild(endGame);
 		stage.addChild(pressEnter);
+		clearInterval(keepingScore);
 		//Restart game by hitting enter.
 		if (startNewGame) {
 			gameOver = false;
 			PrepareArtwork();
+			score = 0;
+			scoreBoard.setText("Score: " + score);
+			keepingScore = setInterval(KeepScore, 1000);
 		}
 	}
 }
 
 function Start() {
 	PrepareArtwork();
+	keepingScore = setInterval(KeepScore, 1000);
 	playing = setInterval(Update, 30);
 }
 Start();
