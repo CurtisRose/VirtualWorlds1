@@ -21,6 +21,7 @@ var floor = height - 130,
 	character = PIXI.Texture.fromImage("character.png"),
 	character2 = PIXI.Texture.fromImage("character2.png"),
 	goblin = PIXI.Texture.fromImage("goblin.png"),
+	goblin2 = PIXI.Texture.fromImage("goblin2.png"),
 	skySprite = new PIXI.Sprite(sky),
 	groundSprite = new PIXI.Sprite(ground),
 	cloudsSprite = new PIXI.Sprite(clouds),
@@ -29,6 +30,7 @@ var floor = height - 130,
 	sprite = new PIXI.Sprite(character),
 	sprite2 = new PIXI.Sprite(character2),
 	goblinSprite = new PIXI.Sprite(goblin),
+	goblinSprite2 = new PIXI.Sprite(goblin2),
 	endGame = new PIXI.Text("Game Over", {font:"50px Arial", fill:"red"}),
 	pressEnter = new PIXI.Text("Press Enter to Play Again", {font:"25px Arial", fill:"black"}),
 	score = 0,
@@ -170,6 +172,8 @@ function PrepareArtwork() {
 	//Scale goblin to look nicer.
 	goblinSprite.scale.x = 1.8;
 	goblinSprite.scale.y = 1.8;
+	goblinSprite2.scale.x = 1.8;
+	goblinSprite2.scale.y = 1.8;
 	//Set rotation anchor at center of character sprite.
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.5;
@@ -178,6 +182,8 @@ function PrepareArtwork() {
 	//Set rotation anchor at center of goblin sprite.
 	goblinSprite.anchor.x = 0.5;
 	goblinSprite.anchor.y = 0.5;
+	goblinSprite2.anchor.x = 0.5;
+	goblinSprite2.anchor.y = 0.5;
 	//Position character sprite at arbitrary x axis but on floor on y axis.
 	sprite.position.x = 200;
 	sprite.position.y = floor;
@@ -186,6 +192,8 @@ function PrepareArtwork() {
 	//Position goblin sprite at arbitrary x axis, away from character.
 	goblinSprite.position.x = 500;
 	goblinSprite.position.y = floor;
+	goblinSprite2.position.x = 500;
+	goblinSprite2.position.y = floor;
 	//Setting the "Game Over" text position.
 	endGame.position.x = 190;
 	endGame.position.y = 280;
@@ -203,16 +211,21 @@ function PrepareArtwork() {
 	characters.addChild(sprite);
 	characters.addChild(sprite2);
 	characters.addChild(goblinSprite);
+	characters.addChild(goblinSprite2);
 }
 
 function GoblinMovement() {
 	if (goblinSprite.position.x >= sprite.position.x) {
 		goblinSprite.position.x -= goblinSpeed;
 		goblinSprite.scale.x = -1.8;
+		goblinSprite2.position.x -= goblinSpeed;
+		goblinSprite2.scale.x = -1.8;
 	}
 	else if (goblinSprite.position.x <= sprite.position.x) {
 		goblinSprite.position.x += goblinSpeed;
 		goblinSprite.scale.x = 1.8;
+		goblinSprite2.position.x += goblinSpeed;
+		goblinSprite2.scale.x = 1.8;
 	}
 }
 
@@ -226,6 +239,14 @@ function Walking() {
 			sprite.renderable = true;
 			sprite2.renderable = false;
 		}
+	}
+	if (goblinSprite.renderable){
+		goblinSprite.renderable = false;
+		goblinSprite2.renderable = true;
+	} 
+	else if (goblinSprite2.renderable){
+		goblinSprite.renderable = true;
+		goblinSprite2.renderable = false;
 	}
 }
 
